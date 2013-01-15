@@ -1,4 +1,3 @@
-
 1.My first markdown document
 
 # 1.这是第一个Markdown文本
@@ -30,6 +29,6 @@ use
 # 不过作为以后的重要博客内容
 还是需要好好掌握一下的
 
-<img src="images/First_markdown/1.jpg" alt="天空" width="300" height="200"/>
+<img src="/images/First_markdown/1.jpg" alt="天空" width="300" height="200"/>
 
 # 所以一切都要做好
