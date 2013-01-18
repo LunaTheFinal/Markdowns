@@ -282,11 +282,75 @@ output：产生0个或更多的物体
 
 <h1>4. Chapter4 Transforms</h1>
 
-<h2>4.1 Translation</h2>
+<h3>4.1.1 Translation</h3>
 
 <p>Translation矩阵如下：
 \[ {T(t)=T(t_x,t_y,t_z)=\left(\begin{array}{ccc}1&0&0&t_x\\0&1&0&t_y\\0&0&0&t_z\\0&0&0&1\end{array}\right)} \]
-很明显，如果是point类型，例如\( {p=(p_x,p_y,p_z,1)} \)，那么与T运算的结果就是\( {p'=(p_x+t_x,p_y+t_y,p_z+t_z,1)} \)</p>
+很明显，如果是point类型，例如\( {p=(p_x,p_y,p_z,1)} \)，那么与T运算的结果就是\( {p'=(p_x+t_x,p_y+t_y,p_z+t_z,1)} \)
+而对于vector类型，由于是\( {v=(v_x,v_y,v_z,0)} \)的形式，所以vector类型不会被translation的操作所改变
+Translation的inversion\( T^{-1}(t) \)是\( T(-t) \),也就是将其中的取反</p>
+
+<h3>4.1.2 Rotation</h3>
+
+<p>这里只需要记住Rotation的公式就可以了
+\[ R_x(\phi)=\left(\begin{array}{ccc}1&0&0&0\\0&cos(\phi)&-sin(\phi)&0\\0&sin(\phi)&cos(\phi)&0\\0&0&0&1\end{array}\right) \]
+\[ R_y(\phi)=\left(\begin{array}{ccc}cos(\phi)&0&sin(\phi)&0\\0&1&0&0\\-sin(\phi)&0&cos(\phi)&0\\0&0&0&1\end{array}\right) \]
+\[ R_z(\phi)=\left(\begin{array}{ccc}cos(\phi)&0&-sin(\phi)&0\\sin(\phi)&0&cos(\phi)&0\\0&0&1&0\\0&0&0&1\end{array}\right) \]
+注意一点，以上这些公式的迹（\( trace \))都是一样的
+要绕着一个点旋转的话，只需将这个点移动到坐标原点，然后按照对应的轴进行旋转就可以了，因此如果绕点p旋转，则应当是：
+\[ X=T(p)R_z(\phi)T(-p) \]</p>
+
+<h3>4.1.3 Scaling</h3>
+
+<p>也是只需要记住公式就可以：
+\[ S(s)=\left(\begin{array}{ccc}s_x&0&0&0\\0&s_y&0&0\\0&0&s_z&0\\0&0&0&1\end{array}\right) \]</p>
+
+<p>另外，这两个是等价的uniform的scaling：</p>
+
+<p>\[ S(s)=\left(\begin{array}{ccc}5&0&0&0\\0&5&0&0\\0&0&5&0\\0&0&0&1\end{array}\right),S'(s)=\left(\begin{array}{ccc}1&0&0&0\\0&1&0&0\\0&0&1&0\\0&0&0&1/5\end{array}\right) \]</p>
+
+<p>后面的式子效率并不高</p>
+
+<p>如果S中的一个或者三个元素是负数，那么就是一个反射矩阵。如果两个是负的，那么旋转了\( \pi \)</p>
+
+<h3>4.1.4 Sheer</h3>
+
+<h3>4.1.5 Concatenation of Transforms</h3>
+
+<h3>4.1.6 Rigid body transforms</h3>
+
+<p>以上章节没有太多内容</p>
+
+<h3>4.1.7 Normal Transform</h3>
+
+<p>对于一个多边形来说，它的Normal的变换不能采用相同的矩阵，而应当采用该矩阵的ajoint矩阵
+但分析一下就知道，其实只需要计算upper left的3x3矩阵的ajoint，但其实这一步分也并不需要
+其实最后发现……normal transform本身就是个伪命题</p>
+
+<h3>Computation of Inverses</h3>
+
+<ul>
+<li>\( M=T(t)R(\phi) \)，那么\( M^{-1}=R(-\phi)T(-t) \)</li>
+<li>如果Matrix是正交的，那么\( M^{-1}=M^T \)，因为所有的rotation的sequence也是一个rotation，所以rotation一般来说是正交的</li>
+<li>如果没有这些特性，那么通过伴随矩阵、Cramer法则、LU分解、高斯消元等都可以进行计算，Cramer法则和Adjoint Method应该多加考虑，因为If比较少适用于SIMD</li>
+</ul>
+
+<h3>一个有趣的问题，绕任意轴旋转</h3>
+
+<p>设绕轴\( r \)旋转\( \alpha \)度
+1.首先找到与\( r \)正交的单位向量\( s \)与\( t \),形成了基向量，因此idea就是转换基向量之后，绕轴rotation
+2.将\( r \)去掉最小的一个，将剩下两个交换，并反号其中第一个，然后得到\( s \),通过cross product得到\( t=r{\times}s \)，记得单位化
+这样就得到了正交基向量
+\[ M=\left(\begin{array}{ccc}r^T\\s^T\\t^T\end{array}\right) \]
+这个矩阵的作用，可以将原来的坐标变换到新坐标系
+\[ X=M^TR_x(\alpha)M \]
+这样就比较明显了</p>
+
+<h2>4.3 四元数</h2>
+
+<p>处理旋转比较有优势</p>
+
+<p>##</p>
 
 <p>2</p>
 
