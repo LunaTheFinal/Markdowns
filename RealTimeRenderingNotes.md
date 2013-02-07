@@ -1,10 +1,10 @@
 # Real time rendering 读书笔记
 
-书的网站：www.realtimerendering.com是学习图形学的一个不错的参考
+书的网站：www.realtimerendering.com是学习图形学的参考
 
 ***
 
-##  Chapter 2 The Graphics Rendering Pipeline
+# Chapter 2 The Graphics Rendering Pipeline
 
 本章的主要内容是关于graphics rendering pipeline. 该pipeline的作用如下：
 >*给出一个虚拟的摄像机，三维物体、光源、着色函数、纹理后，产生（render）一个二维的图像*
@@ -14,7 +14,7 @@ real-time rendering 的pipeline可以粗略划分为三个阶段
 * Application级，由CPU完成，运算逻辑比较复杂，
 * Geometry级，在GPU上执行。GPU上既有很多programmable cores，同时又有很多固定操作的硬件
 * Rasterizer，利用前一级的结果在GPU上进行
-
+have something changed
 其中每一个可能又是一条流水线。 容易理解的是，流水线中最慢的一级决定了render的速度。这个速度可以被表示为FPS或Hz。 例如
 > *流水线中最慢的一级须要20ms才能完成，那么render speed就是$$\frac{1}{0.020}=50Hz]$$*
 
@@ -44,8 +44,9 @@ Shading一般在World Coordinates中进行
 
 注意，pixel[0,9]实际上cover了[-0.5,9.5)的Window Coordinate, 不过后来的OpenGL和DirectX10都使用了另一种mapping的方法，即pixel[0,9]cover了[0.0,10.0)
 
+***
 
-## 2.4.3 Rasterizer Stage
+## 2.4 Rasterizer Stage
 得到了变换和投影之后的顶点，以及相应的着色信息之后，rasterizer stage的目标是计算屏幕上每一个像素应该着什么颜色。Rasterizer Stage由以下步骤构成
 ###2.4.1 Triangle Setup
 计算三角形表面，插值等，由固定硬件进行操作
@@ -57,3 +58,85 @@ Shading一般在World Coordinates中进行
 每一个像素的信息存在了color buffer中，在merge stage中可以结合shading stage中产生的颜色碎片，并进行可见面辨别。Z-buffer和color buffer一样大
 ##2.5 Through the Pipeline
 Follow a model of a CAD application
+
+***
+
+#  Chapter 3 The Graphics Processing Unit
+
+NVIDIA defines the GPU. 
+为了效率，pipeline中的一部分还是只能进行配置，不能进行编程，但之后的大趋势是programmable
+
+Vertex Shader=>Geometry Shader=>Clipping=>Screen Mapping=>Triangle Setup=>Triangle Traversal=>Pixel Shader=>Merger
+
+Vertex Shader是完全的Programmable，对应于chapter2中的Model and View Transform、Vertex Shading和Projection三个阶段。
+Geometry Shader也是fully programmable的, 操作primitive的vertices。 Clipping\ screen mapping\triangle setup和triangle traversal都是固定的，而pixel shader是完全programmable的，能够进行pixel shading的计算。
+
+##3.2 The Programmable Shader Stage
+现代的Shader使用了一种common shader core，可以进行vertex,pixel和geometry三种shader的运算。
+
+Shader的编程使用了一种类似C的编程语言：shading language HLSL、CG、GLSL
+
+##3.4 The Vertex Shader
+
+顾名思义，只针对vertices. vertex shader提供了修改、创建或者忽略一些多边形顶点的操作。
+##3.5 Geometric Shader
+input：物体和物体的顶点
+output：产生0个或更多的物体
+例如，mesh可以作为input，他们的中心可以作为output的points。三角形的法向量可能被计算出来，并加入output的data中，诸如此类。
+###3.5.1 stream output
+out put in a stream,可以随时读取
+
+##3.6 The Pixel Shader
+已经准备好了rasterization的数据。
+每一个triangle都会被traverse，并且每一个三角形都会根据vertex的数据进行interpolate，
+
+##3.7 Merging Stage
+
+##3.8 Effects
+
+***
+
+#4. Chapter4 Transforms
+
+##4.1 Translation
+
+
+2
+
+2
+
+22
+
+2
+
+2
+
+2
+
+2
+
+2
+
+2
+
+2
+
+2
+
+2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
